@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Teachable Machine Demo</title>
+  <title>Teachable Machine – Auto Start</title>
   <link rel="icon" href="data:,">
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
     #webcam-container { margin-top: 20px; }
     #label-container div { margin-top: 4px; font-size: 18px; }
-    button { padding: 10px 20px; font-size: 16px; }
   </style>
 </head>
 <body>
   <h1>Teachable Machine Image Model</h1>
 
-  <button id="startBtn">Start</button>
   <div id="webcam-container"></div>
   <div id="label-container"></div>
 
@@ -24,13 +22,15 @@
   <!-- Teachable Machine Image Library -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
 
-  <script defer>
-    // Folder that contains model.json, metadata.json, weights.bin
-    const MODEL_PATH = "my_model/";   // ensure this folder is in the same directory as index.html
+  <script>
+    // Path to your exported model folder
+    const MODEL_PATH = "my_model/";
 
     let model, webcam, labelContainer, maxPredictions;
 
-    document.getElementById("startBtn").addEventListener("click", init);
+    window.onload = () => {
+      init();   // automatically run when page loads
+    };
 
     async function init() {
       try {
@@ -42,7 +42,7 @@
 
         const flip = true;
         webcam = new tmImage.Webcam(320, 240, flip);
-        await webcam.setup();
+        await webcam.setup();   // prompts for camera permission
         await webcam.play();
         window.requestAnimationFrame(loop);
 
@@ -52,8 +52,8 @@
           labelContainer.appendChild(document.createElement("div"));
         }
       } catch (err) {
-        console.error("Failed to load model or access camera:", err);
-        alert("Error loading model or camera. Check console for details.");
+        console.error("Error loading model or accessing camera:", err);
+        alert("Error loading model or accessing camera. Check console for details.");
       }
     }
 
